@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+
+{% block content %}
+{% get_categories as categories %}
+{% get_brand as brands %}
+ <div class="shop_sidebar_area">
+
+            <!-- ##### Single Widget ##### -->
+            <div class="widget catagory mb-50">
+                <!-- Widget Title -->
+                <h6 class="widget-title mb-30">Catagories</h6>
+
+                <!--  Catagories  -->
+                <div class="catagories-menu">
+                    <ul>
+                        {% for category in categories %}
+                        <li class=""><a href="{% url 'store:category_products' category.pk %}">{{ category }}</a></li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="amado_product_area section-padding-100">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="product-topbar d-xl-flex align-items-end justify-content-between">
+                            <!-- Total Products -->
+                            <div class="total-products">
+                                <p>Showing {{ products.start_index }}–{{ products.end_index }} of {{ products.paginator.count }}</p>
+                            </div>
+                            <!-- Sorting -->
+                            <div class="product-sorting d-flex">
+                                <div class="sort-by-date d-flex align-items-center mr-15">
+                                    <p>Sort by</p>
+                                    <form  action="" method="get">
+                                        <select name="sort_by" id="sortBydate" onchange="this.form.submit()">
+                                            <option value=""{% if not request.GET.sort_by %}selected{% endif %}>All</option>
+                                            <option value="price"{% if request.GET.sort_by == "price" %}selected{% endif %}>Low to High</option>
+                                            <option value="-price"{% if request.GET.sort_by == "-price" %}selected{% endif %}>High to Low</option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <div class="view-product d-flex align-items-center">
+                                    <p>View</p>
+                                    <form action="" method="get">
+                                        <select name="view" id="viewProduct" onchange="this.form.submit()">
+                                            <option value="1"{% if request.GET.view == "1" %}selected{% endif %}>1</option>
+                                            <option value="2"{% if request.GET.view == "2" %}selected{% endif %}>2</option>
+                                            <option value="3"{% if request.GET.view == "3" %}selected{% endif %}>3</option>
+                                            <option value="4"{% if request.GET.view == "4" %}selected{% endif %}>4</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Single Product Area -->
+                    {% for product in products %}
+                    <div class="col-12 col-sm-6 col-md-12 col-xl-6">
+                        <div class="single-product-wrapper">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img src="{{ product.preview.url }}" alt="">
+                                <!-- Hover Thumb -->
+                                <img class="hover-img" src="img/product-img/product1.jpg" alt="">
+                            </div>
+
+                            <!-- Product Description -->
+                            <div class="product-description d-flex align-items-center justify-content-between">
+                                <!-- Product Meta Data -->
+                                <div class="product-meta-data">
+                                    <div class="line"></div>
+                                    <p class="product-price">{{ product.price }}</p>
+                                    <a href="{% url 'store:detail' product.slug %}">
+                                        <h6>{{ product.name }}</h6>
+                                    </a>
+                                </div>
+                                <!-- Ratings & Cart -->
+                                <div class="ratings-cart text-right">
+                                    <div class="ratings">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="cart">
+                                        <a href="cart.html" data-toggle="tooltip" data-placement="left" title="Add to Cart"><img src="img/core-img/cart.png" alt=""></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Pagination -->
+                        {% if products.has_other_pages %}
+                        <nav aria-label="navigation">
+                            <ul class="pagination justify-content-end mt-50">
+                                {% for page in products.paginator.page_range %}
+                                {% if page == products.number %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ page }}&sort_by={{ request.GET.sort_by }}&view={{ request.GET.view }}">{{ page }}</a></li>
+                                {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}&sort_by={{ request.GET.sort_by }}&view={{ request.GET.view }}">{{ page }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock content %}

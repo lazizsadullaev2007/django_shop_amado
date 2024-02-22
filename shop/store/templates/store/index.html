@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+ <div class="products-catagories-area clearfix">
+            <div class="amado-pro-catagory clearfix">
+                {% for product in products %}
+                <div class="single-products-catagory clearfix" style="height: 500px">
+                    <a href="{% url 'store:shop' %}">
+                        <img src="{{ product.preview.url }}" alt="" style="height: 100%">
+                        <!-- Hover Content -->
+                        <div class="hover-content">
+                            <div class="line"></div>
+                            <p>From ${{ product.price }}</p>
+                            <h4>{{ product.name }}</h4>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock content %}
